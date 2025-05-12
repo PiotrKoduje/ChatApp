@@ -119,6 +119,11 @@ p {
   max-width: 200px;
 }
 
+.message--bot {
+  color: rgb(221, 121, 28);
+  font-style: italic;
+}
+
 .message--self .message__content {
   background: #3498db;
 }

@@ -33,6 +33,7 @@ const login = (e) => {
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
     messageContentInput.focus();
+    socket.emit('join', {name: userNameInput.value}) // EMITTER
   } else {
     showWarning(userNameInput, 'Who are you');
   }
@@ -45,7 +46,7 @@ const addMessage = (user, msg) => {
   messagesList.insertAdjacentHTML('beforeend',`
     <li class="message message--received ${user === userName ? 'message--self' : ''}">
     <h3 class="message__author">${user === userName ? 'You' : user}</h3>
-    <div class="message__content">${msg}</div>
+    <div class="message__content ${user === 'Chat Bot' ? 'message--bot' : ''}">${msg}</div>
   </li>`
   );
   messagesList.scrollTop = messagesList.scrollHeight;
@@ -58,7 +59,6 @@ const sendMessage = (e) => {
     addMessage(userName, msg);
     socket.emit('message', { author: userName, content: msg}) // EMITTER
     messageContentInput.value = '';
-
   } else {
     showWarning(messageContentInput, 'Type something');
   }
@@ -69,6 +69,6 @@ addMessageForm.addEventListener('submit', sendMessage);
 // WEBSOCKET
 const socket = io();
 
-// LISTENERS
+// LISTENER
 socket.on('message', ({author, content}) => addMessage(author, content));
 
