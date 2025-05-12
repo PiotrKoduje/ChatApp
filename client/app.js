@@ -53,12 +53,22 @@ const addMessage = (user, msg) => {
 
 const sendMessage = (e) => {
   e.preventDefault();
-  if (messageContentInput.value !== '') {
-    addMessage(userName, messageContentInput.value);
+  const msg = messageContentInput.value;
+  if (msg !== '') {
+    addMessage(userName, msg);
+    socket.emit('message', { author: userName, content: msg}) // EMITTER
     messageContentInput.value = '';
+
   } else {
     showWarning(messageContentInput, 'Type something');
   }
 };
 
 addMessageForm.addEventListener('submit', sendMessage);
+
+// WEBSOCKET
+const socket = io();
+
+// LISTENERS
+socket.on('message', ({author, content}) => addMessage(author, content));
+
